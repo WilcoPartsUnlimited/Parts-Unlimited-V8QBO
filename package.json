@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "concurrently --kill-others \"cd frontend && yarn start\" \"cd backend && yarn start\"",
-    "seeds": "node ./backend/node/scripts/seeds.js"
+    "seeds": "node ./backend/scripts/seeds.js"
   },
   "keywords": [],
   "author": "Wilco Inc.",
