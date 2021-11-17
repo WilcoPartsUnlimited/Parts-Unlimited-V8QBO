@@ -40,5 +40,7 @@ const run = async () => {
     await populateUsers();
 }
 
-run();
+return run().then(() => {
+    console.log("Finished populating database!");
+});
 
