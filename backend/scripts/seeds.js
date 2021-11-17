@@ -1,5 +1,7 @@
-const { internet, name, random, lorem } = require("faker");
+const { internet, name, random, lorem, datatype, image } = require("faker");
 const mongoose = require("mongoose");
+
+const BROKEN_IMAGE = 'http://www.domain.com/MyImages/battleship-game-board.jpg';
 
 const connectedToDatabase = () => {
     if (!process.env.MONGODB_URI) {
@@ -17,11 +19,15 @@ const requireModels = () => {
 };
 
 const populateUsers = async (count = 120) => {
+    const users = [];
+
     for (let i = 0; i < count; i++) {
         const user = buildRandomUser();
 
-        await user.save();
+        users.push(await user.save());
     }
+
+    return users;
 }
 
 const buildRandomUser = () => {
@@ -37,30 +43,41 @@ const buildRandomUser = () => {
     return user;
 }
 
-const populateItems = async (count = 120) => {
+const populateItems = async (count = 120, users, comments) => {
     for (let i = 0; i < count; i++) {
-        const item = buildRandomItem();
+        const randomUser = random.arrayElement(users);
+        const randomComment = random.arrayElement(comments);
+        const item = buildRandomItem(randomUser, randomComment);
 
         await item.save();
     }
 }
 
-const buildRandomItem = () => {
+const buildRandomItem = (seller, comment) => {
     const Item = mongoose.model("Item");
 
     const item = new Item();
 
     item.slug = lorem.slug();
+    item.title = lorem.word();
+    item.description = lorem.sentence();
+    item.image = datatype.number(10) <= 2 ? BROKEN_IMAGE : image.sports();
+    item.seller = seller.id;
+    item.comments = [comment.id];
 
     return item;
 }
 
 const populateComments = async (count = 120) => {
+    const comments = [];
+
     for (let i = 0; i < count; i++) {
         const comment = buildRandomComment();
 
-        await comment.save();
+        comments.push(await comment.save());
     }
+
+    return comments;
 }
 
 const buildRandomComment = () => {
@@ -77,9 +94,9 @@ const buildRandomComment = () => {
 const run = async () => {
     connectedToDatabase();
     requireModels();
-    await populateUsers();
-    await populateItems();
-    await populateComments();
+    const users = await populateUsers();
+    const comments = await populateComments();
+    await populateItems(130, users, comments);
 }
 
 run().then(() => {
