@@ -10,7 +10,7 @@
     "dev": "nodemon ./app.js",
     "seeds": "echo 'Please create seeds file'",
     "test": "newman run ./tests/api-tests.postman.json -e ./tests/env-api-tests.postman.json",
-    "stop": "lsof -ti :3000 | xargs kill"
+    "stop": "lsof -ti :4000 | xargs kill"
   },
   "dependencies": {
     "body-parser": "1.15.0",
