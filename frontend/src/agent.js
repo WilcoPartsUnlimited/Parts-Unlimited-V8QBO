@@ -5,7 +5,7 @@ const superagent = superagentPromise(_superagent, global.Promise);
 
 const API_ROOT =
   process.env.NODE_ENV !== "production"
-    ? "http://localhost:3000/api"
+    ? "http://localhost:4000/api"
     : "https://partsunlimited-api.wilco.work/api";
 
 const encode = encodeURIComponent;
