@@ -1,4 +1,4 @@
-const { internet, name } = require("faker");
+const { internet, name, random } = require("faker");
 const mongoose = require("mongoose");
 
 const connectedToDatabase = () => {
@@ -14,7 +14,7 @@ const requireModels = () => {
     require('../models/User');
 };
 
-const populateUsers = async (count = 10) => {
+const populateUsers = async (count = 120) => {
     for (let i = 0; i < count; i++) {
         const user = buildRandomUser();
 
@@ -27,7 +27,7 @@ const buildRandomUser = () => {
 
     const user = new User();
 
-    user.username = name.firstName();
+    user.username = `${name.firstName()}${random.number()}`;
     user.email = internet.email();
     user.setPassword(internet.password());
 
