@@ -13,6 +13,7 @@ const connectedToDatabase = () => {
 const requireModels = () => {
     require('../models/User');
     require('../models/Item');
+    require('../models/Comment');
 };
 
 const populateUsers = async (count = 120) => {
@@ -49,16 +50,36 @@ const buildRandomItem = () => {
 
     const item = new Item();
 
-    item.slug = `${lorem.slug()}`;
+    item.slug = lorem.slug();
 
     return item;
 }
+
+const populateComments = async (count = 120) => {
+    for (let i = 0; i < count; i++) {
+        const comment = buildRandomComment();
+
+        await comment.save();
+    }
+}
+
+const buildRandomComment = () => {
+    const Comment = mongoose.model("Comment");
+
+    const comment = new Comment();
+
+    comment.body = lorem.sentence();
+
+    return comment;
+}
+
 
 const run = async () => {
     connectedToDatabase();
     requireModels();
     await populateUsers();
     await populateItems();
+    await populateComments();
 }
 
 run().then(() => {
